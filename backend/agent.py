@@ -6,17 +6,14 @@ import uuid
 from datetime import date
 from pathlib import Path
 import httpx
-import httpx2
 from anthropic import AsyncAnthropic
 import audit_log
 from tools.genie import ask_genie
 from tools.sql import run_sql, list_tables, get_schema, DEFAULT_CATALOG
 
-_anthropic_kwargs: dict = {"api_key": os.environ.get("ANTHROPIC_API_KEY", "placeholder")}
+_anthropic_kwargs: dict = {"api_key": os.environ.get("ANTHROPIC_API_KEY", "placeholder"), "timeout": 120.0}
 if _base_url := os.environ.get("ANTHROPIC_BASE_URL"):
     _anthropic_kwargs["base_url"] = _base_url
-    # Corporate proxies often use self-signed certs — disable SSL verification for internal URLs
-    _anthropic_kwargs["http_client"] = httpx2.AsyncClient(verify=False, timeout=120.0)
 client = AsyncAnthropic(**_anthropic_kwargs)
 
 _BASE_PROMPT = (Path(__file__).parent / "agent_metadata.md").read_text()
