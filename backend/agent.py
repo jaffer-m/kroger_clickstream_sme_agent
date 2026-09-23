@@ -18,7 +18,7 @@ if _base_url := os.environ.get("ANTHROPIC_BASE_URL"):
     _anthropic_kwargs["http_client"] = httpx.AsyncClient(verify=False)
 client = AsyncAnthropic(**_anthropic_kwargs)
 
-_BASE_PROMPT = Path("agent_metadata.md").read_text()
+_BASE_PROMPT = (Path(__file__).parent / "agent_metadata.md").read_text()
 
 
 def _system_prompt() -> str:

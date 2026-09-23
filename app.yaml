@@ -1,8 +1,9 @@
-command: ["sh", "-c", "cd backend && uvicorn main:app --host 0.0.0.0 --port 8000"]
+command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "backend"]
 env:
   - name: DEFAULT_CATALOG
     value: "kr_behavioral_analytics_prod"
-  # DATABRICKS_HOST is injected automatically by Databricks Apps
+  - name: ALATION_CATALOG
+    value: "kr_behavioral_analytics_prod"
   - name: SQL_WAREHOUSE_ID
     valueFrom:
       secretRef:
@@ -18,18 +19,11 @@ env:
       secretRef:
         scope: kroger-sme-agent
         key: genie_space_id
-  # Optional: only set if using an internal AI proxy instead of the public Anthropic API
-  # - name: ANTHROPIC_BASE_URL
-  #   valueFrom:
-  #     secretRef:
-  #       scope: kroger-sme-agent
-  #       key: anthropic_base_url
   - name: ANTHROPIC_API_KEY
     valueFrom:
       secretRef:
         scope: kroger-sme-agent
         key: anthropic_api_key
-  # Optional: Alation catalog enrichment
   - name: ALATION_BASE_URL
     valueFrom:
       secretRef:
@@ -50,5 +44,3 @@ env:
       secretRef:
         scope: kroger-sme-agent
         key: alation_ds_id
-  - name: ALATION_CATALOG
-    value: "kr_behavioral_analytics_prod"
