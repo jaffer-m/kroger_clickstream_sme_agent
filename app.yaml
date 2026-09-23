@@ -4,3 +4,33 @@ env:
     value: "kr_behavioral_analytics_prod"
   - name: ALATION_CATALOG
     value: "kr_behavioral_analytics_prod"
+  - name: ANTHROPIC_API_KEY
+    valueFrom:
+      secretRef:
+        scope: kroger-sme-agent
+        key: anthropic_api_key
+  - name: DATABRICKS_TOKEN
+    valueFrom:
+      secretRef:
+        scope: kroger-sme-agent
+        key: databricks_token
+  - name: ALATION_BASE_URL
+    valueFrom:
+      secretRef:
+        scope: kroger-sme-agent
+        key: alation_base_url
+  - name: ALATION_REFRESH_TOKEN
+    valueFrom:
+      secretRef:
+        scope: kroger-sme-agent
+        key: alation_refresh_token
+  - name: ALATION_USER_ID
+    valueFrom:
+      secretRef:
+        scope: kroger-sme-agent
+        key: alation_user_id
+  - name: ALATION_DS_ID
+    valueFrom:
+      secretRef:
+        scope: kroger-sme-agent
+        key: alation_ds_id
