@@ -4,6 +4,8 @@ env:
     value: "kr_behavioral_analytics_prod"
   - name: ALATION_CATALOG
     value: "kr_behavioral_analytics_prod"
+  - name: ANTHROPIC_BASE_URL
+    value: "https://ai-model-proxy.aks-ur-prd-internal.8451.cloud"
   - name: ANTHROPIC_API_KEY
     value: "sk-c50021f6U87oLC7IJYkaIa"
   - name: DATABRICKS_TOKEN
