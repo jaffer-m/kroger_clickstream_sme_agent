@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 httpx
-anthropic
+anthropic==0.117.0
 python-dotenv
 sse-starlette
 aiofiles
