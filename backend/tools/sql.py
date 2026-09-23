@@ -5,8 +5,6 @@ import os
 import re
 import httpx
 
-WORKSPACE = os.environ["DATABRICKS_HOST"]
-WAREHOUSE_ID = os.environ["SQL_WAREHOUSE_ID"]
 DEFAULT_CATALOG = os.environ.get("DEFAULT_CATALOG", "kr_behavioral_analytics_prod")
 
 
@@ -74,11 +72,13 @@ async def run_sql(query: str) -> dict:
     if validation_error:
         return {"columns": [], "rows": [], "row_count": 0, "error": validation_error}
 
-    async with httpx.AsyncClient(base_url=WORKSPACE, headers=_headers(), timeout=90) as client:
+    workspace = os.environ["DATABRICKS_HOST"]
+    warehouse_id = os.environ["SQL_WAREHOUSE_ID"]
+    async with httpx.AsyncClient(base_url=workspace, headers=_headers(), timeout=90) as client:
         r = await client.post(
             "/api/2.0/sql/statements",
             json={
-                "warehouse_id": WAREHOUSE_ID,
+                "warehouse_id": warehouse_id,
                 "statement": query,
                 "wait_timeout": "50s",
                 "on_wait_timeout": "CONTINUE",

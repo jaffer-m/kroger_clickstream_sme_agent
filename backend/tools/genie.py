@@ -6,10 +6,6 @@ import httpx
 
 from tools.alation import get_catalog_context
 
-WORKSPACE = os.environ["DATABRICKS_HOST"]
-SPACE_ID = os.environ["GENIE_SPACE_ID"]
-
-
 def _headers():
     return {
         "Authorization": f"Bearer {os.environ['DATABRICKS_TOKEN']}",
@@ -18,21 +14,23 @@ def _headers():
 
 
 async def ask_genie(question: str, genie_conversation_id: str | None = None) -> dict:
+    workspace = os.environ["DATABRICKS_HOST"]
+    space_id = os.environ["GENIE_SPACE_ID"]
     # Enrich the question with business context from the Alation catalog. This is
     # best-effort: get_catalog_context returns "" if Alation is unconfigured or
     # unreachable, in which case Genie receives the original question unchanged.
     catalog_context = await get_catalog_context(question)
     content = f"{catalog_context}\n\nQuestion: {question}" if catalog_context else question
 
-    async with httpx.AsyncClient(base_url=WORKSPACE, headers=_headers(), timeout=90) as client:
+    async with httpx.AsyncClient(base_url=workspace, headers=_headers(), timeout=90) as client:
         if genie_conversation_id is None:
             r = await client.post(
-                f"/api/2.0/genie/spaces/{SPACE_ID}/start-conversation",
+                f"/api/2.0/genie/spaces/{space_id}/start-conversation",
                 json={"content": content},
             )
         else:
             r = await client.post(
-                f"/api/2.0/genie/spaces/{SPACE_ID}/conversations/{genie_conversation_id}/messages",
+                f"/api/2.0/genie/spaces/{space_id}/conversations/{genie_conversation_id}/messages",
                 json={"content": content},
             )
         r.raise_for_status()
@@ -45,7 +43,7 @@ async def ask_genie(question: str, genie_conversation_id: str | None = None) -> 
         for attempt in range(60):
             await asyncio.sleep(0.5 if attempt < 4 else 1.0)
             r = await client.get(
-                f"/api/2.0/genie/spaces/{SPACE_ID}/conversations/{conversation_id}/messages/{message_id}"
+                f"/api/2.0/genie/spaces/{space_id}/conversations/{conversation_id}/messages/{message_id}"
             )
             r.raise_for_status()
             msg = r.json()
@@ -72,7 +70,7 @@ async def ask_genie(question: str, genie_conversation_id: str | None = None) -> 
             elif atype == "query":
                 generated_sql = attachment.get("query", {}).get("query")
                 r2 = await client.get(
-                    f"/api/2.0/genie/spaces/{SPACE_ID}/conversations/{conversation_id}"
+                    f"/api/2.0/genie/spaces/{space_id}/conversations/{conversation_id}"
                     f"/messages/{message_id}/query-result"
                 )
                 if r2.status_code == 200:
