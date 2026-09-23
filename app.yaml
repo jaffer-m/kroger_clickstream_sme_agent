@@ -5,12 +5,12 @@ env:
   - name: ALATION_CATALOG
     value: "kr_behavioral_analytics_prod"
   - name: ANTHROPIC_BASE_URL
-    value: "https://ai-model-proxy.aks-ur-prd-internal.8451.cloud"
+    value: "YOUR_ANTHROPIC_PROXY_URL"
   - name: ANTHROPIC_API_KEY
-    value: "sk-c50021f6U87oLC7IJYkaIa"
+    value: "YOUR_ANTHROPIC_API_KEY"
   - name: DATABRICKS_TOKEN
-    value: "dapi8c7a0a98ced845c0f3f4a8a75322dec7-2"
+    value: "YOUR_DATABRICKS_PAT"
   - name: SQL_WAREHOUSE_ID
-    value: "af406dad3b521a53"
+    value: "YOUR_SQL_WAREHOUSE_ID"
   - name: GENIE_SPACE_ID
-    value: "01f1b5ce50a41956b1cf72badf8de35e"
+    value: "YOUR_GENIE_SPACE_ID"
